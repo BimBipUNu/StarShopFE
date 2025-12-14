@@ -24,7 +24,7 @@ export const fetchAllCategories = createAsyncThunk(
     try {
       const response = await Api.category.getAll();
       // Response đã được unwrap bởi axiosConfig interceptor
-      return response;
+      return response?.data || response;
     } catch (err: any) {
       const message =
         err.response?.data?.message || "Lỗi tải danh sách danh mục";
@@ -39,7 +39,7 @@ export const fetchCategoryById = createAsyncThunk(
   async (id: string, { rejectWithValue }) => {
     try {
       const response = await Api.category.getById({ id: Number(id) });
-      return response.data || response;
+      return response?.data || response;
     } catch (err: any) {
       const message =
         err.response?.data?.message || "Lỗi tải thông tin danh mục";
@@ -114,10 +114,18 @@ const categorySlice = createSlice({
         if (action.payload) {
           if (Array.isArray(action.payload)) {
             state.items = action.payload;
-          } else if (action.payload.categories && Array.isArray(action.payload.categories)) {
-            state.items = action.payload.categories;
-          } else if (action.payload.data && Array.isArray(action.payload.data)) {
-            state.items = action.payload.data;
+          } else if (
+            typeof action.payload === "object" &&
+            "categories" in action.payload &&
+            Array.isArray((action.payload as any).categories)
+          ) {
+            state.items = (action.payload as any).categories;
+          } else if (
+            typeof action.payload === "object" &&
+            "data" in action.payload &&
+            Array.isArray((action.payload as any).data)
+          ) {
+            state.items = (action.payload as any).data;
           } else {
             state.items = [];
           }

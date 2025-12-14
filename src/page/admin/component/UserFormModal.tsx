@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import type { UserType } from "../../../types/userTypes";
 
@@ -10,25 +9,35 @@ interface UserFormModalProps {
 }
 
 function UserFormModal({ show, onHide, onSubmit, user }: UserFormModalProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    email: string;
+    password: string;
+    role: "user" | "admin";
+    isActive: boolean;
+  }>({
     name: "",
     email: "",
+    password: "",
     role: "user",
     isActive: true,
   });
 
   useEffect(() => {
     if (user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData({
-        name: user.name,
+        name: user.name || "",
         email: user.email,
+        password: user.password,
         role: user.role,
-        isActive: user.isActive,
+        isActive: user.isActive ?? true,
       });
     } else {
       setFormData({
         name: "",
         email: "",
+        password: "",
         role: "user",
         isActive: true,
       });
@@ -56,7 +65,9 @@ function UserFormModal({ show, onHide, onSubmit, user }: UserFormModalProps) {
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               className="border p-2 rounded w-full"
               required
             />
@@ -66,7 +77,21 @@ function UserFormModal({ show, onHide, onSubmit, user }: UserFormModalProps) {
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              className="border p-2 rounded w-full"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-1">Mật khẩu</label>
+            <input
+              type="password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
               className="border p-2 rounded w-full"
               required
             />
@@ -75,7 +100,12 @@ function UserFormModal({ show, onHide, onSubmit, user }: UserFormModalProps) {
             <label className="block mb-1">Vai trò</label>
             <select
               value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  role: e.target.value as "user" | "admin",
+                })
+              }
               className="border p-2 rounded w-full"
             >
               <option value="user">User</option>

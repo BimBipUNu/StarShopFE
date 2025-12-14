@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { CartItemType } from "../../types/cartType";
 import Api from "../../api";
-import type { AppDispatch } from "../../store/store";
-import { useDispatch } from "react-redux";
 import { createOrder } from "../../api/order";
 // 1. Import Toast
 import toast from "react-hot-toast";
@@ -19,7 +17,6 @@ interface UserProfile {
 
 export default function Cart() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [isLoading, setIsLoading] = useState(false);

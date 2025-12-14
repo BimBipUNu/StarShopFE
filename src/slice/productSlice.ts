@@ -72,7 +72,7 @@ export const deleteProduct = createAsyncThunk(
   "product/delete",
   async (data: ProductType, { rejectWithValue }) => {
     try {
-      await Api.product.delete(data);
+      await Api.product.delete(data.id);
       return data.id;
     } catch (err: any) {
       const message = err.response?.data?.message || "Lỗi xóa sản phẩm";
